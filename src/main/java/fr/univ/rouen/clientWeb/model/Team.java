@@ -1,4 +1,4 @@
-package fr.univ.rouen.clientWeb.model;
+package fr.univ.rouen.davtom.web2project.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,9 +47,7 @@ public class Team implements Serializable{
 		String chaine = "";
 		for(int cpt=0;cpt<membre.size();cpt++){
 			chaine+=membre.get(cpt);
-			chaine+=" ";
-			
-			
+			chaine+="";
 		}
 		 return chaine.toString()   ; 
 	 }

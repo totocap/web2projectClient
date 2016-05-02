@@ -1,4 +1,4 @@
-package fr.univ.rouen.clientWeb.model;
+package fr.univ.rouen.davtom.web2project.model;
 
 import java.io.Serializable;
 
@@ -69,7 +69,7 @@ public class Contact implements Serializable{
 
 	@Override
 	 public String toString(){
-		 return "Contact [nom= " + nom + ", prenom=" + prenom + "]"; 
+		 return "Contact: nom : " + nom + ", prenom : " + prenom ; 
 	 }
 	 
 }

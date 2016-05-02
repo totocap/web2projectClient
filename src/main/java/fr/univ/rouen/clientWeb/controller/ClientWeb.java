@@ -40,16 +40,15 @@ public class ClientWeb {
 	
 	public StbListVO getResumePage()
 	{
-	    /*RestTemplate restTemplate = new RestTemplate();
+	    RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		ResponseEntity<StbListVO> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
 				HttpMethod.GET, entity, StbListVO.class);
-		StbListVO result = response.getBody();*/
-	     
-		return new StbListVO();
-	    //return result;
+		StbListVO result = response.getBody();
+
+	    return result;
 	}
 	
 	public StbModelVO getSTBById(String id)
@@ -84,6 +83,8 @@ public class ClientWeb {
 	
 	public static void main(String[] args){
 		// http://howtodoinjava.com/spring/spring-restful/spring-restful-client-resttemplate-example/
+		System.out.println(ClientWeb.getInstance().getResumePage());
+	
 	}
 
 }

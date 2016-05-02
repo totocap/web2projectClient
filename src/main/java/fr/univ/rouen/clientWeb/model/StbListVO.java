@@ -1,4 +1,4 @@
-package fr.univ.rouen.clientWeb.model;
+package fr.univ.rouen.davtom.web2project.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package fr.univ.rouen.clientWeb.model;
+package fr.univ.rouen.davtom.web2project.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,19 +31,14 @@ public class Fonctionnalite implements Serializable{
 		this.description = description;
 		this.exigence = exigence;
 		 }
-	 	 
-	 	 
 	 
 	 public Fonctionnalite(){
 			
 			 }
-	
-
-	
 	@Override
 	 public String toString(){
-		 return "Fonctionalites [priorite= " + priorite + ", description=" + description +
-				 ", exigence= " + exigence + "]"; 
+		 return "Fonctionalite priorite : " + priorite + ",\n description : " + description +
+				 ", \n exigence : " + exigence + "\n"; 
 	 }
 	 
 }
