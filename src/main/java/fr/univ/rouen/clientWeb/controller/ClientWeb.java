@@ -25,6 +25,10 @@ public class ClientWeb {
 	public String getUri() {
 		return uri;
 	}
+	
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 
 	public static String getFrontPage()
 	{
@@ -39,7 +43,7 @@ public class ClientWeb {
 	    RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		ResponseEntity<StbListVO> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
 				HttpMethod.GET, entity, StbListVO.class);
 		StbListVO result = response.getBody();
@@ -52,7 +56,7 @@ public class ClientWeb {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		ResponseEntity<StbModelVO> response = restTemplate.exchange(getInstance().getUri() + "/resume/{id}", 
 				HttpMethod.GET, entity, StbModelVO.class, id);
 		StbModelVO result = response.getBody();
@@ -63,7 +67,7 @@ public class ClientWeb {
 	private static String postStb(StbModelVO stb) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_XML);
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<StbModelVO> entity = new HttpEntity<StbModelVO>(stb, headers);
 		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/depot",
 				HttpMethod.POST, entity, String.class);
@@ -79,7 +83,7 @@ public class ClientWeb {
 	
 	public static void main(String[] args){
 		// http://howtodoinjava.com/spring/spring-restful/spring-restful-client-resttemplate-example/
-		getSTBById("1");
+		System.out.println(getSTBById("1"));
 		for(StbModelVO s :  getResumePage().getStb()) {
 			//System.out.println(s);
 		}

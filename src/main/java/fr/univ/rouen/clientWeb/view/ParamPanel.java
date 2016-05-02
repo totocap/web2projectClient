@@ -18,7 +18,7 @@ public class ParamPanel extends JPanel {
 
 	public ParamPanel() {
 		serverName =  new JTextField(35);
-		serverName.setText(ClientWeb.instance.uri);
+		serverName.setText(ClientWeb.getInstance().getUri());
 		validate = new JButton("Valider");
 		
 		JPanel p = new JPanel(); {
@@ -38,7 +38,7 @@ public class ParamPanel extends JPanel {
 		
 		validate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ClientWeb.instance.uri = serverName.getText();
+				ClientWeb.getInstance().setUri(serverName.getText());
 			}
 		});
 	}
