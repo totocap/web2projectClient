@@ -1,4 +1,4 @@
-package fr.univ.rouen.davtom.web2project.model;
+package fr.univ.rouen.clientWeb.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="stb")
+@XmlRootElement (name="resume")
 @XmlAccessorType(XmlAccessType.NONE)
 
 public class Resume implements Serializable{

@@ -267,11 +267,18 @@ public class PostPanel extends JPanel {
 		
 		depot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (fonctionnalites.size() == 0) {
+					JOptionPane.showMessageDialog(PostPanel.this, "Veuillez entrer au moins une fonctionnalite.");
+					return;
+				}
+				if (team.getMembre().size() == 0) {
+					JOptionPane.showMessageDialog(PostPanel.this, "Veuillez entrer au moins un membre.");
+					return;
+				}
 				if (controlField(titre, "Veuillez entrer un titre.")
 					&& controlField(version, "Veuillez entrer une version.")
 					&& controlField(date, "Veuillez entrer une date.")
 					&& controlField(description, "Veuillez entrer une descritpion de STB.")
-					&& controlField(commentaire, "Veuillez entrer un commentaire de STB.")
 					&& controlField(entiteClient, "Veuillez entrer une entite pour le client.")
 					&& controlField(nomClient, "Veuillez entrer un nom pour le client.")
 					&& controlField(prenomClient, "Veuillez entrer un prenom pour le client.")
@@ -283,7 +290,7 @@ public class PostPanel extends JPanel {
 					Client client = new Client(entiteClient.getText(), contact, codePostalClient.getText());
 					try {
 						// A gerer : l'ID
-						StbModelVO stb = new StbModelVO(1000, titre.getText(), Double.parseDouble(version.getText()), date.getText(), 
+						StbModelVO stb = new StbModelVO(ClientWeb.getInstance().getMaxIndex() + 1, titre.getText(), Double.parseDouble(version.getText()), date.getText(), 
 								description.getText(), client, team, fonctionnalites, commentaire.getText());
 						String res = ClientWeb.getInstance().postStb(stb);
 						JOptionPane.showMessageDialog(PostPanel.this, res);

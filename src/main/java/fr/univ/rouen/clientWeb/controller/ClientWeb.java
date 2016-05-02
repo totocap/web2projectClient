@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import fr.univ.rouen.clientWeb.model.StbListVO;
+import fr.univ.rouen.clientWeb.model.ResumeList;
 import fr.univ.rouen.clientWeb.model.StbModelVO;
 
 public class ClientWeb {
@@ -19,7 +19,8 @@ public class ClientWeb {
 	private final static ClientWeb instance =  new ClientWeb();
 	
 	private ClientWeb() {
-		uri = "http://rocky-gorge-86159.herokuapp.com/";
+		//uri = "http://rocky-gorge-86159.herokuapp.com";
+		uri = "http://localhost:8080/web2project";
 	}
 	
 	public String getUri() {
@@ -38,17 +39,19 @@ public class ClientWeb {
 	    return result;
 	}
 	
-	public StbListVO getResumePage()
+	public ResumeList getResumePage()
 	{
 	    RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<StbListVO> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
-				HttpMethod.GET, entity, StbListVO.class);
-		StbListVO result = response.getBody();
+		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
+				HttpMethod.GET, entity, String.class);
+		String result = response.getBody();
+		System.out.println(result);
 
-	    return result;
+	    //return result;
+	    return new ResumeList();
 	}
 	
 	public StbModelVO getSTBById(String id)
@@ -72,6 +75,17 @@ public class ClientWeb {
 		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/depot",
 				HttpMethod.POST, entity, String.class);
 		String result = response.getBody();
+		
+	    return result;
+	}
+	
+	public Integer getMaxIndex() {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		ResponseEntity<Integer> response = restTemplate.exchange(getInstance().getUri() + "/maxId", 
+				HttpMethod.GET, entity, Integer.class);
+		Integer result = response.getBody();
 		
 	    return result;
 	}
