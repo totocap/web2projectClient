@@ -30,7 +30,7 @@ public class ClientWeb {
 		this.uri = uri;
 	}
 
-	public static String getFrontPage()
+	public String getFrontPage()
 	{
 	    RestTemplate restTemplate = new RestTemplate();
 	    String result = restTemplate.getForObject(getInstance().getUri() + "/", String.class);
@@ -38,20 +38,21 @@ public class ClientWeb {
 	    return result;
 	}
 	
-	public static StbListVO getResumePage()
+	public StbListVO getResumePage()
 	{
-	    RestTemplate restTemplate = new RestTemplate();
+	    /*RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
 		ResponseEntity<StbListVO> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
 				HttpMethod.GET, entity, StbListVO.class);
-		StbListVO result = response.getBody();
+		StbListVO result = response.getBody();*/
 	     
-	    return result;
+		return new StbListVO();
+	    //return result;
 	}
 	
-	public static StbModelVO getSTBById(String id)
+	public StbModelVO getSTBById(String id)
 	{
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -64,7 +65,7 @@ public class ClientWeb {
 	    return result;
 	}
 	
-	private static String postStb(StbModelVO stb) {
+	public String postStb(StbModelVO stb) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
@@ -83,10 +84,6 @@ public class ClientWeb {
 	
 	public static void main(String[] args){
 		// http://howtodoinjava.com/spring/spring-restful/spring-restful-client-resttemplate-example/
-		System.out.println(getSTBById("1"));
-		for(StbModelVO s :  getResumePage().getStb()) {
-			//System.out.println(s);
-		}
 	}
 
 }

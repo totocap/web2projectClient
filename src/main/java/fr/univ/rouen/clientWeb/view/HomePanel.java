@@ -16,7 +16,7 @@ public class HomePanel extends JPanel {
 	public HomePanel() {
 		textPane = new JTextPane();
 		textPane.setContentType("text/html");
-		textPane.setText(ClientWeb.getFrontPage());
+		textPane.setText(ClientWeb.getInstance().getFrontPage());
 		this.add(textPane);
 		
 		this.addComponentListener(new ComponentAdapter() {

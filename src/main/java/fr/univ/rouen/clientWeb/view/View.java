@@ -11,9 +11,10 @@ public class View {
 	/**
 	 * La fenetre principale.
 	 */
-	JFrame frame;
+	private JFrame frame;
 	
-	JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane;
+	
 
 	public View() {
 		createView();
@@ -22,7 +23,6 @@ public class View {
 	}
 	
 	public void display() {
-		frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 	}
@@ -30,7 +30,7 @@ public class View {
 	// OUTILS
 	private void createView() {
 		frame = new JFrame("Client");
-		frame.setSize(800, 600);
+		frame.setSize(1000, 700);
 		
 		tabbedPane = new JTabbedPane();
 	}

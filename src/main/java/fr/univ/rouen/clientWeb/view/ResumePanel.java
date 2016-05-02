@@ -17,7 +17,7 @@ public class ResumePanel extends JPanel {
 	
 	public ResumePanel() {
 		textPane = new JTextPane();
-		StbListVO listStb = ClientWeb.getResumePage();
+		StbListVO listStb = ClientWeb.getInstance().getResumePage();
 		String s = "";
 		for (StbModelVO stb : listStb.getStb()) {
 			s += stb.toString() + "\n";

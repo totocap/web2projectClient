@@ -59,7 +59,7 @@ public class StbByIdPanel extends JPanel {
 					result.setText("Veuillez entrer un id de STB.");
 				} else {
 					try {
-						StbModelVO stb = ClientWeb.getSTBById(numStb.getText());
+						StbModelVO stb = ClientWeb.getInstance().getSTBById(numStb.getText());
 						result.setText(stb.toString());
 					} catch(Exception e1) {
 						result.setText(e1.getMessage());

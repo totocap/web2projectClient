@@ -2,15 +2,31 @@ package fr.univ.rouen.clientWeb.view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
+import javax.swing.text.JTextComponent;
+
+import fr.univ.rouen.clientWeb.controller.ClientWeb;
+import fr.univ.rouen.clientWeb.model.Client;
+import fr.univ.rouen.clientWeb.model.Contact;
+import fr.univ.rouen.clientWeb.model.Exigence;
+import fr.univ.rouen.clientWeb.model.Fonctionnalite;
+import fr.univ.rouen.clientWeb.model.Membre;
+import fr.univ.rouen.clientWeb.model.StbModelVO;
+import fr.univ.rouen.clientWeb.model.Team;
 
 public class PostPanel extends JPanel {
 	private JButton depot;
@@ -18,7 +34,8 @@ public class PostPanel extends JPanel {
 	private JTextField titre;
 	private JTextField version;
 	private JTextField date;
-	private JTextPane description;
+	private JTextArea description;
+	private JTextArea commentaire;
 	
 	private JTextField entiteClient;
 	private JComboBox<String> genreClient;
@@ -30,18 +47,27 @@ public class PostPanel extends JPanel {
 	private JTextField nomMembre;
 	private JTextField prenomMembre;
 	private JButton ajoutMembre;
-	private JTextPane listeMembres;
+	private JTextArea listeMembres;
 	
-	private JTextPane descriptionFonctionnalite;
+	private Team team;
+	
+	private JTextArea descriptionFonctionnalite;
 	private JTextField prioriteFonctionnalite;
 	private JTextField identifiantExigence;
 	private JTextField prioriteExigence;
-	private JTextPane descriptionExigence;
+	private JTextArea descriptionExigence;
 	private JButton ajoutExigence;
 	private JButton ajoutFonctionnalite;
-	private JTextPane listeFonctionnalites;
+	private JTextArea listeFonctionnalites;
+	
+	private ArrayList<Fonctionnalite> fonctionnalites;
+	private ArrayList<Exigence> exigences;
 	
 	public PostPanel() {
+		team = new Team();
+		fonctionnalites = new ArrayList<Fonctionnalite>();
+		exigences = new ArrayList<Exigence>();
+		
 		createView();
         placeComponents();
         createController();
@@ -53,7 +79,10 @@ public class PostPanel extends JPanel {
 		titre = new JTextField(10);
 		version = new JTextField(10);
 		date = new JTextField(20);
-		description = new JTextPane();
+		description = new JTextArea();
+		description.setRows(2);
+		commentaire = new JTextArea();
+		commentaire.setRows(2);
 		
 		entiteClient = new JTextField(10);
 		genreClient = new JComboBox<String>();
@@ -69,287 +98,118 @@ public class PostPanel extends JPanel {
 		nomMembre = new JTextField();
 		prenomMembre = new JTextField();
 		ajoutMembre = new JButton("Ajouter");
-		listeMembres = new JTextPane();
+		listeMembres = new JTextArea();
+		listeMembres.setEditable(false);
 		
-		descriptionFonctionnalite = new JTextPane();
+		descriptionFonctionnalite = new JTextArea();
+		descriptionFonctionnalite.setRows(2);
 		prioriteFonctionnalite = new JTextField(10);
 		identifiantExigence = new JTextField(10);
 		prioriteExigence = new JTextField(10);
-		descriptionExigence = new JTextPane();
+		descriptionExigence = new JTextArea();
+		descriptionExigence.setRows(2);
 		ajoutExigence = new JButton("Ajouter");
 		ajoutFonctionnalite = new JButton("Ajouter");
-		listeFonctionnalites = new JTextPane();
+		listeFonctionnalites = new JTextArea();
+		listeFonctionnalites.setEditable(false);
 	}
 
 	private void placeComponents() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel p = new JPanel(new GridBagLayout()); {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			p.add(new JLabel("Titre : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(titre, c);
+			addToPanel(p, new JLabel("Titre : "), 0, 0, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, titre, 1, 0, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 1;
-			p.add(new JLabel("Version : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 1;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(version, c);
+			addToPanel(p, new JLabel("Version : "), 0, 1, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, version, 1, 1, GridBagConstraints.HORIZONTAL, 1., 1.);
+
+			addToPanel(p, new JLabel("Date : "), 0, 2, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, date, 1, 2, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 2;
-			p.add(new JLabel("Date : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 2;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(date, c);
+			addToPanel(p, new JLabel("Description : "), 0, 3, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, description, 1, 3, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 3;
-			p.add(new JLabel("Description : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 3;
-			c.fill = GridBagConstraints.BOTH;
-			c.weightx = 1.;
-			c.weighty = 1.;
-			p.add(description, c);
+			addToPanel(p, new JLabel("Commentaire : "), 0, 4, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, commentaire, 1, 4, GridBagConstraints.HORIZONTAL, 1., 1.);
 		}
 		p.setBorder(BorderFactory.createTitledBorder("General"));
 		this.add(p);
 		
 		p = new JPanel(new GridBagLayout()); {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			p.add(new JLabel("Entite : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(entiteClient, c);
+			addToPanel(p, new JLabel("Entite : "), 0, 0, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, entiteClient, 1, 0, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 2;
-			p.add(new JLabel("Nom : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 2;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(nomClient, c);
+			addToPanel(p, new JLabel("Nom : "), 0, 1, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, nomClient, 1, 1, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 3;
-			p.add(new JLabel("Prenom : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 3;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(prenomClient, c);
+			addToPanel(p, new JLabel("Prenom : "), 0, 2, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, prenomClient, 1, 2, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 4;
-			p.add(new JLabel("Genre : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 4;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(genreClient, c);
+			addToPanel(p, new JLabel("Genre : "), 0, 3, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, genreClient, 1, 3, GridBagConstraints.HORIZONTAL, 1., 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 5;
-			p.add(new JLabel("Code postal : "), c);
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 5;
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.weightx = 1.;
-			p.add(codePostalClient, c);
+			addToPanel(p, new JLabel("Code postal : "), 0, 4, GridBagConstraints.NONE, 0.1, 1.);
+			addToPanel(p, codePostalClient, 1, 4, GridBagConstraints.HORIZONTAL, 1., 1.);
 		}
 		p.setBorder(BorderFactory.createTitledBorder("Client"));
 		this.add(p);
 		
 		p = new JPanel(new GridBagLayout()); {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.weightx = 1.;
-			c.weighty = 1.;
 			JPanel q = new JPanel(new GridBagLayout()); {
-				GridBagConstraints c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 0;
-				q.add(new JLabel("Nom : "), c2);
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 0;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(nomMembre, c2);
+				addToPanel(q, new JLabel("Nom : "), 0, 0, GridBagConstraints.NONE, 0.1, 1.);
+				addToPanel(q, nomMembre, 1, 0, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				
-				c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 1;
-				q.add(new JLabel("Prenom : "), c2);
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 1;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(prenomMembre, c2);
+				addToPanel(q, new JLabel("Prenom : "), 0, 1, GridBagConstraints.NONE, 0.1, 1.);
+				addToPanel(q, prenomMembre, 1, 1, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				
-				c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 2;
-				q.add(new JLabel("Genre : "), c2);
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 2;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(genreMembre, c2);
+				addToPanel(q, new JLabel("Genre : "), 0, 2, GridBagConstraints.NONE, 0.1, 1.);
+				addToPanel(q, genreMembre, 1, 2, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				
-				c = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 3;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(ajoutMembre, c2);
+				addToPanel(q, ajoutMembre, 1, 3, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 			}
-			p.add(q, c);
+			addToPanel(p, q, 0, 0, GridBagConstraints.BOTH, 0.5, 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.weightx = 1.;
-			c.weighty = 1.;
-			p.add(listeMembres, c);
+			addToPanel(p, listeMembres, 1, 0, GridBagConstraints.BOTH, 1., 1.);
 		}
 		p.setBorder(BorderFactory.createTitledBorder("Equipe"));
 		this.add(p);
 		
 		p = new JPanel(new GridBagLayout()); {
-			GridBagConstraints c = new GridBagConstraints();
-			c.gridx = 0;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.weightx = 0.;
-			c.weighty = 1.;
 			JPanel q = new JPanel(new GridBagLayout()); {
-				GridBagConstraints c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 0;
-				q.add(new JLabel("Description : "), c2);
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 0;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(descriptionFonctionnalite, c2);
+				addToPanel(q, new JLabel("Description : "), 0, 0, GridBagConstraints.NONE, 0.1, 1.);
+				addToPanel(q, descriptionFonctionnalite, 1, 0, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				
-				c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 1;
-				q.add(new JLabel("Priorite : "), c2);
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 1;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(prioriteFonctionnalite, c2);
+				addToPanel(q, new JLabel("Priorite : "), 0, 1, GridBagConstraints.NONE, 0.1, 1.);
+				addToPanel(q, prioriteFonctionnalite, 1, 1, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				
 				JPanel r = new JPanel(new GridBagLayout()); {
-					GridBagConstraints c3 = new GridBagConstraints();
-					c3.gridx = 0;
-					c3.gridy = 0;
-					r.add(new JLabel("Identifiant : "), c3);
-					c3 = new GridBagConstraints();
-					c3.gridx = 1;
-					c3.gridy = 0;
-					c3.fill = GridBagConstraints.HORIZONTAL;
-					c3.weightx = 1.;
-					r.add(identifiantExigence, c3);
+					addToPanel(r, new JLabel("Identifiant : "), 0, 0, GridBagConstraints.NONE, 0.1, 1.);
+					addToPanel(r, identifiantExigence, 1, 0, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 					
-					c3 = new GridBagConstraints();
-					c3.gridx = 0;
-					c3.gridy = 1;
-					r.add(new JLabel("Description : "), c3);
-					c3 = new GridBagConstraints();
-					c3.gridx = 1;
-					c3.gridy = 1;
-					c3.fill = GridBagConstraints.HORIZONTAL;
-					c3.weightx = 1.;
-					r.add(descriptionExigence, c3);
+					addToPanel(r, new JLabel("Description : "), 0, 1, GridBagConstraints.NONE, 0.1, 1.);
+					addToPanel(r, descriptionExigence, 1, 1, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 					
-					c3 = new GridBagConstraints();
-					c3.gridx = 0;
-					c3.gridy = 2;
-					r.add(new JLabel("Priorite : "), c3);
-					c3 = new GridBagConstraints();
-					c3.gridx = 1;
-					c3.gridy = 2;
-					c3.fill = GridBagConstraints.HORIZONTAL;
-					c3.weightx = 1.;
-					r.add(prioriteExigence, c3);
+					addToPanel(r, new JLabel("Priorite : "), 0, 2, GridBagConstraints.NONE, 0.1, 1.);
+					addToPanel(r, prioriteExigence, 1, 2, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 					
-					c3 = new GridBagConstraints();
-					c3.gridx = 1;
-					c3.gridy = 3;
-					c3.fill = GridBagConstraints.HORIZONTAL;
-					c3.weightx = 1.;
-					r.add(ajoutExigence, c3);
+					addToPanel(r, ajoutExigence, 1, 3, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 				}
 				r.setBorder(BorderFactory.createTitledBorder("Exigence"));
-				c2 = new GridBagConstraints();
-				c2.gridx = 0;
-				c2.gridy = 2;
-				c2.gridwidth = 2;
-				c2.fill = GridBagConstraints.BOTH;
-				c2.weightx = 1.;
-				c2.weighty = 1.;
-				q.add(r, c2);
-				
-				c2 = new GridBagConstraints();
-				c2.gridx = 1;
-				c2.gridy = 3;
-				c2.fill = GridBagConstraints.HORIZONTAL;
-				c2.weightx = 1.;
-				q.add(ajoutFonctionnalite, c2);
+				GridBagConstraints c = new GridBagConstraints();
+				c.gridx = 0;
+				c.gridy = 2;
+				c.gridwidth = 2;
+				c.fill = GridBagConstraints.BOTH;
+				c.weightx = 1.;
+				c.weighty = 1.;
+				q.add(r, c);
+
+				addToPanel(q, ajoutFonctionnalite, 1, 3, GridBagConstraints.HORIZONTAL, 0.1, 1.);
 			}
-			p.add(q, c);
+			addToPanel(p, q, 0, 0, GridBagConstraints.BOTH, 0.5, 1.);
 			
-			c = new GridBagConstraints();
-			c.gridx = 1;
-			c.gridy = 0;
-			c.fill = GridBagConstraints.BOTH;
-			c.weightx = 1.;
-			c.weighty = 1.;
-			p.add(listeFonctionnalites, c);
+			addToPanel(p, listeFonctionnalites, 1, 0, GridBagConstraints.BOTH, 1., 1.);
 		}
 		p.setBorder(BorderFactory.createTitledBorder("Fonctionnalite"));
 		this.add(p);
@@ -361,7 +221,117 @@ public class PostPanel extends JPanel {
 	}
 
 	private void createController() {
-		// TODO Auto-generated method stub
+		ajoutMembre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (controlField(nomMembre, "Veuillez entrer un nom de membre.")
+					&& controlField(prenomMembre, "Veuillez entrer un prenom de membre.")) {
+					// True si Homme, false sinon ?
+					boolean gender =  genreMembre.getSelectedItem() == "Homme";
+					team.addMember(new Membre(gender, nomMembre.getText(), prenomMembre.getText()));
+					afficherMembres();
+				}
+			}
+		});
 		
+		ajoutExigence.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (controlField(identifiantExigence, "Veuillez entrer un identifiant d'exigence.")
+					&& controlField(descriptionExigence, "Veuillez entrer une description d'exigence.")
+					&& controlField(prioriteExigence, "Veuillez entrer une priorite d'exigence.")) {
+					try {
+						exigences.add(new Exigence(identifiantExigence.getText(), descriptionExigence.getText(), Integer.parseInt(prioriteExigence.getText())));
+					} catch(NumberFormatException n) {
+						JOptionPane.showMessageDialog(PostPanel.this, "La priorite de l'exigence n'est pas un entier.");
+						return;
+					}
+					afficherFonctionnalites();
+				}
+			}
+		});
+		
+		ajoutFonctionnalite.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (controlField(descriptionFonctionnalite, "Veuillez entrer une description de fonctionnalite.")
+					&& controlField(prioriteFonctionnalite, "Veuillez entrer une priorite de fonctionnalite.")) {
+					try {
+						fonctionnalites.add(new Fonctionnalite(Integer.parseInt(prioriteFonctionnalite.getText()), descriptionFonctionnalite.getText(), exigences));
+					} catch(NumberFormatException n) {
+						JOptionPane.showMessageDialog(PostPanel.this, "La priorite de la fonctionnalite n'est pas un entier.");
+						return;
+					}
+					exigences = new ArrayList<Exigence>();
+					afficherFonctionnalites();
+				}
+			}
+		});
+		
+		depot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (controlField(titre, "Veuillez entrer un titre.")
+					&& controlField(version, "Veuillez entrer une version.")
+					&& controlField(date, "Veuillez entrer une date.")
+					&& controlField(description, "Veuillez entrer une descritpion de STB.")
+					&& controlField(commentaire, "Veuillez entrer un commentaire de STB.")
+					&& controlField(entiteClient, "Veuillez entrer une entite pour le client.")
+					&& controlField(nomClient, "Veuillez entrer un nom pour le client.")
+					&& controlField(prenomClient, "Veuillez entrer un prenom pour le client.")
+					&& controlField(codePostalClient, "Veuillez entrer un code postal pour le client.")) {
+					// Client
+					// True pour un homme, false pour une femme.
+					boolean genderClient = genreClient.getSelectedItem() == "Homme";
+					Contact contact = new Contact(genderClient, nomClient.getText(), prenomClient.getText());
+					Client client = new Client(entiteClient.getText(), contact, codePostalClient.getText());
+					try {
+						// A gerer : l'ID
+						StbModelVO stb = new StbModelVO(1000, titre.getText(), Double.parseDouble(version.getText()), date.getText(), 
+								description.getText(), client, team, fonctionnalites, commentaire.getText());
+						String res = ClientWeb.getInstance().postStb(stb);
+						JOptionPane.showMessageDialog(PostPanel.this, res);
+					} catch (NumberFormatException n) {
+						JOptionPane.showMessageDialog(PostPanel.this, "La version de la STB n'est pas un nombre.");
+						return;
+					}
+				}
+			}
+		});
+	}
+	
+	private void addToPanel(JPanel p, JComponent comp, int gridx, int gridy, int fill, double weightx, double weighty) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = gridx;
+		c.gridy = gridy;
+		c.fill = fill;
+		c.weightx = weightx;
+		c.weighty = weighty;
+		p.add(comp, c);
+	}
+	
+	// Returns true if field is OK, false if field is empty.
+	private boolean controlField(JTextComponent field, String message) {
+		if (field.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, message);
+			return false;
+		}
+		return true;
+	}
+	
+	private void afficherMembres() {
+		String s = "";
+		for (Membre m : team.getMembre()) {
+			s += m.toString() + "\n";
+		}
+		listeMembres.setText(s);
+	}
+	
+	private void afficherFonctionnalites() {
+		String s = "Exigences en cours :\n";
+		for (Exigence e : exigences) {
+			s += e.toString() + "\n";
+		}
+		s += "-------\n";
+		for (Fonctionnalite f : fonctionnalites) {
+			s += f.toString() + "\n";
+		}
+		listeFonctionnalites.setText(s);
 	}
 }
