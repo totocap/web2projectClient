@@ -8,6 +8,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.springframework.beans.factory.annotation.Required;
+
 @XmlRootElement (name="membre")
 @XmlAccessorType(XmlAccessType.NONE)
 

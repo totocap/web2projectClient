@@ -45,13 +45,11 @@ public class ClientWeb {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
-				HttpMethod.GET, entity, String.class);
-		String result = response.getBody();
-		System.out.println(result);
+		ResponseEntity<ResumeList> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
+				HttpMethod.GET, entity, ResumeList.class);
+		ResumeList result = response.getBody();
 
-	    //return result;
-	    return new ResumeList();
+	    return result;
 	}
 	
 	public StbModelVO getSTBById(String id)
