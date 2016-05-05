@@ -13,40 +13,43 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="fonctionnalite")
+@XmlRootElement(name = "fonctionnalite")
 @XmlAccessorType(XmlAccessType.NONE)
 
-public class Fonctionnalite implements Serializable{
+public class Fonctionnalite implements Serializable {
 	private static final long serialVersionUID = 7L;
-	
-	
+
 	@XmlAttribute
 	@Min(1)
 	@Max(10)
 	private int priorite;
-	
+
 	@XmlElement
 	private String description;
-	
+
 	@XmlElement
 	@NotNull
 	@Size(min = 2)
 	private List<Exigence> exigence;
 
-	public Fonctionnalite(Integer priorite,String description,
-			 List<Exigence> exigence){
+	public Fonctionnalite(Integer priorite, String description, List<Exigence> exigence) {
 		super();
 		this.priorite = priorite;
 		this.description = description;
 		this.exigence = exigence;
 	}
-	 
-	 public Fonctionnalite(){
-			
+
+	public Fonctionnalite() {
+
 	}
+
 	@Override
-	 public String toString(){
-		 return "Fonctionalite priorite : " + priorite + ",\n description : " + description +
-				 ", \n exigence : " + exigence; 
-	 }
+	public String toString() {
+		String s = "Fonctionalite[priorite : " + priorite + ", description : " + description + ", exigences : \n";
+		for (Exigence e : exigence) {
+			s += "   " + e.toString() + "\n";
+		}
+		s += "]";
+		return s;
+	}
 }

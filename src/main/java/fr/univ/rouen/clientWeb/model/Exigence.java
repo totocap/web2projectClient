@@ -7,36 +7,35 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="exigence")
+@XmlRootElement(name = "exigence")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Exigence implements Serializable{
+public class Exigence implements Serializable {
 	private static final long serialVersionUID = 4L;
-	
-	 @XmlElement
-	  private String identifiant; 
-	 
-	 @XmlElement
-	  private String description; 
-	 
-	 @XmlElement
-	  private int priorite; 
-	 
-	 	 public Exigence(String identifiant,String description,int priorite){
-		 super();
-		 this.identifiant = identifiant;
-		 this.description = description;
-		 this.priorite = priorite;
-		 }
-	 	 
-	 	 	 
-	 public Exigence(){
-		 
-	 }
-	
+
+	@XmlElement
+	private String identifiant;
+
+	@XmlElement
+	private String description;
+
+	@XmlElement
+	private int priorite;
+
+	public Exigence(String identifiant, String description, int priorite) {
+		super();
+		this.identifiant = identifiant;
+		this.description = description;
+		this.priorite = priorite;
+	}
+
+	public Exigence() {
+
+	}
+
 	@Override
-	 public String toString(){
-		 return "Exigence \n identifiant :  " + identifiant + ", \n description : " + description +
-				 ", \n priorite : " + priorite; 
-	 }
-	 
+	public String toString() {
+		return "Exigence[identifiant : " + identifiant + ", description : " + description + ", priorite : " + priorite
+				+ "]";
+	}
+
 }

@@ -12,29 +12,28 @@ public class View {
 	 * La fenetre principale.
 	 */
 	private JFrame frame;
-	
+
 	private JTabbedPane tabbedPane;
-	
 
 	public View() {
 		createView();
-        placeComponents();
-        createController();
+		placeComponents();
+		createController();
 	}
-	
+
 	public void display() {
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 	}
-	
+
 	// OUTILS
 	private void createView() {
 		frame = new JFrame("Client");
 		frame.setSize(1000, 700);
-		
+
 		tabbedPane = new JTabbedPane();
 	}
-	
+
 	private void placeComponents() {
 		tabbedPane.add("Accueil", new HomePanel());
 		tabbedPane.add("Resume", new ResumePanel());
@@ -43,17 +42,17 @@ public class View {
 		tabbedPane.add("Parametres", new ParamPanel());
 		frame.add(tabbedPane, BorderLayout.CENTER);
 	}
-	
+
 	private void createController() {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
+
 	// POINT D'ENTREE
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new View().display();
-            }
-        });
-    }
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				new View().display();
+			}
+		});
+	}
 }

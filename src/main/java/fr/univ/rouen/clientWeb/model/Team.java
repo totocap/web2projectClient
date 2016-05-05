@@ -11,28 +11,22 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="team")
+@XmlRootElement(name = "team")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Team implements Serializable{
+public class Team implements Serializable {
 	private static final long serialVersionUID = 6L;
 
-	
-	 @XmlElement
-	 @NotNull
-	 @Size(min = 1, max = 7)
-	  private List<Membre> membre;
+	@XmlElement
+	@NotNull
+	@Size(min = 1, max = 7)
+	private List<Membre> membre;
 
-	 
-		 
- 	 public Team(){
+	public Team() {
 		super();
 		membre = new ArrayList<Membre>();
-	 }
-	 	 
-	 	 
-	 
-	 
-	public void addMember(Membre membre){
+	}
+
+	public void addMember(Membre membre) {
 		this.membre.add(membre);
 	}
 
@@ -40,20 +34,18 @@ public class Team implements Serializable{
 		return membre;
 	}
 
-
 	public void setMembres(ArrayList<Membre> membre) {
 		this.membre = membre;
 	}
 
-
 	@Override
-	 public String toString(){
-		String chaine = "";
-		for(int cpt=0;cpt<membre.size();cpt++){
-			chaine+=membre.get(cpt);
-			chaine+="";
+	public String toString() {
+		String s = "Team[membres : \n";
+		for (Membre m : membre) {
+			s += "   " + m.toString() + "\n";
 		}
-		 return chaine.toString()   ; 
-	 }
-	 
+		s += "]";
+		return s;
+	}
+
 }

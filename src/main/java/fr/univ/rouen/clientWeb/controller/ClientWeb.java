@@ -13,90 +13,78 @@ import fr.univ.rouen.clientWeb.model.ResumeList;
 import fr.univ.rouen.clientWeb.model.StbModelVO;
 
 public class ClientWeb {
-	
+
 	private String uri;
-	
-	private final static ClientWeb instance =  new ClientWeb();
-	
+
+	private final static ClientWeb instance = new ClientWeb();
+
 	private ClientWeb() {
-		//uri = "http://rocky-gorge-86159.herokuapp.com";
-		uri = "http://localhost:8080/web2project";
+		uri = "http://rocky-gorge-86159.herokuapp.com";
 	}
-	
+
 	public String getUri() {
 		return uri;
 	}
-	
+
 	public void setUri(String uri) {
 		this.uri = uri;
 	}
 
-	public String getFrontPage()
-	{
-	    RestTemplate restTemplate = new RestTemplate();
-	    String result = restTemplate.getForObject(getInstance().getUri() + "/", String.class);
-	     
-	    return result;
-	}
-	
-	public ResumeList getResumePage()
-	{
-	    RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
-		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<ResumeList> response = restTemplate.exchange(getInstance().getUri() + "/resume", 
-				HttpMethod.GET, entity, ResumeList.class);
-		ResumeList result = response.getBody();
+	public String getFrontPage() {
+		RestTemplate restTemplate = new RestTemplate();
+		String result = restTemplate.getForObject(getInstance().getUri() + "/", String.class);
 
-	    return result;
+		return result;
 	}
-	
-	public StbModelVO getSTBById(String id)
-	{
+
+	public ResumeList getResumePage() {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<StbModelVO> response = restTemplate.exchange(getInstance().getUri() + "/resume/{id}", 
+		ResponseEntity<ResumeList> response = restTemplate.exchange(getInstance().getUri() + "/resume", HttpMethod.GET,
+				entity, ResumeList.class);
+		ResumeList result = response.getBody();
+
+		return result;
+	}
+
+	public StbModelVO getSTBById(String id) {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		ResponseEntity<StbModelVO> response = restTemplate.exchange(getInstance().getUri() + "/resume/{id}",
 				HttpMethod.GET, entity, StbModelVO.class, id);
 		StbModelVO result = response.getBody();
-		
-	    return result;
+
+		return result;
 	}
-	
+
 	public String postStb(StbModelVO stb) {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_XML));
 		HttpEntity<StbModelVO> entity = new HttpEntity<StbModelVO>(stb, headers);
-		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/depot",
-				HttpMethod.POST, entity, String.class);
+		ResponseEntity<String> response = restTemplate.exchange(getInstance().getUri() + "/depot", HttpMethod.POST,
+				entity, String.class);
 		String result = response.getBody();
-		
-	    return result;
+
+		return result;
 	}
-	
+
 	public Integer getMaxIndex() {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		ResponseEntity<Integer> response = restTemplate.exchange(getInstance().getUri() + "/maxId", 
-				HttpMethod.GET, entity, Integer.class);
+		ResponseEntity<Integer> response = restTemplate.exchange(getInstance().getUri() + "/maxId", HttpMethod.GET,
+				entity, Integer.class);
 		Integer result = response.getBody();
-		
-	    return result;
+
+		return result;
 	}
-	
+
 	public static ClientWeb getInstance() {
 		return instance;
 	}
-	
-	
-	public static void main(String[] args){
-		// http://howtodoinjava.com/spring/spring-restful/spring-restful-client-resttemplate-example/
-		System.out.println(ClientWeb.getInstance().getResumePage());
-	
-	}
-
 }

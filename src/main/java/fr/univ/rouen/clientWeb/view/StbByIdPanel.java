@@ -10,6 +10,7 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 
@@ -20,39 +21,42 @@ public class StbByIdPanel extends JPanel {
 	private JTextField numStb;
 	private JButton execute;
 	private JTextPane result;
-	
+	private JScrollPane jS;
+
 	public StbByIdPanel() {
 		createView();
-        placeComponents();
-        createController();
+		placeComponents();
+		createController();
 	}
 
 	private void createView() {
-		numStb =  new JTextField(10);
+		numStb = new JTextField(10);
 		numStb.setText("Id");
 		execute = new JButton("Research");
 		result = new JTextPane();
-		result.setPreferredSize(new Dimension(this.getWidth(), this.getHeight() * 8 / 10));
+		result.setEditable(false);
 	}
-	
+
 	private void placeComponents() {
-		JPanel p = new JPanel(new FlowLayout()); {
+		JPanel p = new JPanel(new FlowLayout());
+		{
 			p.add(numStb);
 			p.add(execute);
 		}
 		this.add(p, BorderLayout.NORTH);
-		
-		this.add(result, BorderLayout.CENTER);
+
+		jS = new JScrollPane(result);
+		this.add(jS, BorderLayout.CENTER);
 	}
-	
+
 	private void createController() {
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
-				result.setPreferredSize(new Dimension(StbByIdPanel.this.getWidth(), StbByIdPanel.this.getHeight() * 8 / 10));
+				jS.setPreferredSize(new Dimension(StbByIdPanel.this.getWidth(), StbByIdPanel.this.getHeight() - 45));
 				StbByIdPanel.this.repaint();
 			}
 		});
-		
+
 		execute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (numStb.getText().equals("")) {
@@ -61,7 +65,7 @@ public class StbByIdPanel extends JPanel {
 					try {
 						StbModelVO stb = ClientWeb.getInstance().getSTBById(numStb.getText());
 						result.setText(stb.toString());
-					} catch(Exception e1) {
+					} catch (Exception e1) {
 						result.setText(e1.getMessage());
 					}
 				}
