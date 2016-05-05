@@ -2,7 +2,9 @@ package fr.univ.rouen.clientWeb.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -11,44 +13,52 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
 @XmlRootElement (name="stb")
 @XmlAccessorType(XmlAccessType.NONE)
-
 public class StbModelVO implements Serializable{
 	private static final long serialVersionUID = 2L;
 	
-	 @XmlAttribute
-	  private Integer id;
-	 @XmlElement
-	  private String title; 
-	 @XmlElement
-	 @Range(min = 1, max = 3)
-	  private double version; 
-	 @XmlElement
-	  private String date; 
-	 @XmlElement
-	  private String description; 
-	 @XmlElement
-	 @NotNull
-	  private Client client; 
-	 @XmlElement
-	  private Team team; 
-	 @XmlElement
-	 @NotNull
-	 @Size(min = 1)
-	  private ArrayList<Fonctionnalite> fonctionnalite; 
-	 @XmlElement
-	  private String commentaire; 
 	
-	  private Resume resume; 
+	@XmlAttribute
+	private Integer id;
+	
+	@XmlElement
+	private String title; 
+	 
+	@XmlElement
+	@Range(min = 1, max = 3)
+	private double version;
+	 
+	@XmlElement
+	private String date;
+	 
+	@XmlElement
+	private String description;
+	 
+	@XmlElement
+	@NotNull
+	@Valid
+	private Client client;
+	 
+	@XmlElement
+	@Valid
+	private Team team;
+	 
+	@XmlElement
+	@NotNull
+	@Size(min = 1)
+	@Valid
+	private List<Fonctionnalite> fonctionnalite;
+	 
+	@XmlElement
+	private String commentaire;
 	 
 	 
 	 public StbModelVO(Integer id,String title,double version,String date,
 			 String description,Client client,Team team,
-			 ArrayList<Fonctionnalite> fonctionnalite, String commentaire){
+			 List<Fonctionnalite> fonctionnalite, String commentaire){
 		 super();
 		 this.id = id;
 		 this.title = title;
@@ -59,15 +69,10 @@ public class StbModelVO implements Serializable{
 		 this.team = team;
 		 this.fonctionnalite = fonctionnalite;
 		 this.commentaire = commentaire;
-		 this.resume = new Resume(id,title,version,date,description);
 	 }
 	 
 	 public Resume getResume() {
-		return resume;
-	}
-
-	public void setResume(Resume resume) {
-		this.resume = resume;
+		return new Resume(id,title,version,date,description);
 	}
 
 	public StbModelVO(){
@@ -82,7 +87,7 @@ public class StbModelVO implements Serializable{
 		this.team = team;
 	}
 
-	public ArrayList<Fonctionnalite> getFonctionnalite() {
+	public List<Fonctionnalite> getFonctionnalite() {
 		return fonctionnalite;
 	}
 
@@ -146,7 +151,7 @@ public class StbModelVO implements Serializable{
 				 + "Client : " + client + ",\n"
 				 + "Team : " + team + ",\n"
 				 + "Fonctionnalités : " + fonctionnalite + ",\n"
-				 + "Commentaire : " + commentaire + ",\n";
+				 + "Commentaire : " + commentaire;
 	 } 
 	 
 }

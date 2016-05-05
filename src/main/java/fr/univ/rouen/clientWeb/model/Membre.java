@@ -4,20 +4,19 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import org.springframework.beans.factory.annotation.Required;
+import javax.xml.bind.annotation.XmlAttribute;
 
 @XmlRootElement (name="membre")
 @XmlAccessorType(XmlAccessType.NONE)
-
 public class Membre implements Serializable{
 	private static final long serialVersionUID = 4L;
 	
+	public static final String tableName = "Membre";
+	
 	@XmlAttribute
-	  private boolean gender;
+	private boolean gender;
 	
 	 @XmlElement
 	  private String nom; 
@@ -36,8 +35,6 @@ public class Membre implements Serializable{
 	 public Membre(){
 		 
 	 }
-	 
-	 
 
 	public boolean getGender() {
 		return gender;
@@ -71,7 +68,7 @@ public class Membre implements Serializable{
 
 	@Override
 	 public String toString(){
-		 return " Membre nom : " + nom + ", \n prenom : " + prenom + "\n"; 
+		 return " Membre nom : " + nom + ", \n prenom : " + prenom; 
 	 }
 	 
 }

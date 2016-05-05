@@ -4,13 +4,11 @@ import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name="exigence")
 @XmlAccessorType(XmlAccessType.NONE)
-
 public class Exigence implements Serializable{
 	private static final long serialVersionUID = 4L;
 	
@@ -34,12 +32,11 @@ public class Exigence implements Serializable{
 	 public Exigence(){
 		 
 	 }
-	 
 	
 	@Override
 	 public String toString(){
 		 return "Exigence \n identifiant :  " + identifiant + ", \n description : " + description +
-				 ", \n priorite : " + priorite + "\n"; 
+				 ", \n priorite : " + priorite; 
 	 }
 	 
 }

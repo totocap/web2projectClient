@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name="contact")
 @XmlAccessorType(XmlAccessType.NONE)
-
 public class Contact implements Serializable{
 	private static final long serialVersionUID = 4L;
 	

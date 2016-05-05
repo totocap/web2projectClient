@@ -2,6 +2,7 @@ package fr.univ.rouen.clientWeb.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,14 +13,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement (name="team")
 @XmlAccessorType(XmlAccessType.NONE)
-
 public class Team implements Serializable{
 	private static final long serialVersionUID = 6L;
+
 	
 	 @XmlElement
-	 //@NotNull
-	 //@Size(min = 1, max = 7)
-	  private ArrayList<Membre> membre;
+	 @NotNull
+	 @Size(min = 1, max = 7)
+	  private List<Membre> membre;
 
 	 
 		 
@@ -35,7 +36,7 @@ public class Team implements Serializable{
 		this.membre.add(membre);
 	}
 
-	public ArrayList<Membre> getMembre() {
+	public List<Membre> getMembre() {
 		return membre;
 	}
 
